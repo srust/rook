@@ -127,18 +127,23 @@ If for some reason the operator is not able to remove the finalizer (ie. the ope
 ```console
 for CRD in $(kubectl get crd -n rook-ceph | awk '/ceph.rook.io/ {print $1}'); do
     kubectl get -n rook-ceph "$CRD" -o name | \
-    xargs -I {} kubectl patch {} --type merge -p '{"metadata":{"finalizers": [null]}}'
+    xargs -I {} kubectl patch -n rook-ceph {} --type merge -p '{"metadata":{"finalizers": [null]}}'
 done
 ```
 
-This command will patch the following CRDs on v1.3:
+This command will patch the following CRDs on v1.5:
 >```
 > cephblockpools.ceph.rook.io
 > cephclients.ceph.rook.io
+> cephclusters.ceph.rook.io
 > cephfilesystems.ceph.rook.io
 > cephnfses.ceph.rook.io
+> cephobjectrealms.ceph.rook.io
 > cephobjectstores.ceph.rook.io
 > cephobjectstoreusers.ceph.rook.io
+> cephobjectzonegroups.ceph.rook.io
+> cephobjectzones.ceph.rook.io
+> cephrbdmirrors.ceph.rook.io
 >```
 
 Within a few seconds you should see that the cluster CRD has been deleted and will no longer block other cleanup such as deleting the `rook-ceph` namespace.
